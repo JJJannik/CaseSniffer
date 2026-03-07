@@ -9,13 +9,13 @@ import de.jjjannik.classes.entities.SkinEntity;
 import de.jjjannik.classes.entities.ValueEntity;
 import de.jjjannik.dao.CaseSnifferDao;
 import de.jjjannik.utils.CsSnifferConfiguration.DataSource;
+import de.jjjannik.utils.math.FloatDistributionFunction;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
@@ -78,10 +78,10 @@ public class ExpectedValueCalculator {
                     })
                     .sum();
 
-            FloatRange floatRange = skin.getSkin().getFloatRange();
-
             double rarityProb = skin.getRarity().getProbability() / ( 100.0 * rarityAmount );
-            double floatProb = floatRange == null ? skin.getWear().getFloatRange().getRange() : floatRange.getOverlap(skin.getWear()) / floatRange.getRange();
+            double floatProb = FloatDistributionFunction.STANDARD_FLOAT
+                    .modifyForFloatCap(skin.getSkin().getFloatRange())
+                    .getProbability(skin.getWear());
             double statTrak = skin.isStatTrak() ? 0.1 : 0.9;
 
             double prob = rarityProb * floatProb * statTrak;

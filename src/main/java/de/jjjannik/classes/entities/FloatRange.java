@@ -12,7 +12,7 @@ public class FloatRange {
     private final double max;
 
     public FloatRange(double min, double max) {
-        if (min > max || min < 0 || max > 1) {
+        if (min > max || min < 0.0 || max - 1.0 > 1e-4) {
             throw new IllegalArgumentException("Invalid Float Range [%f, %f]".formatted(min, max));
         }
 

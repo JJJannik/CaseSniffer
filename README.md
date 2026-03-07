@@ -1,7 +1,7 @@
 # CS2 CaseSniffer
 
 The CaseSniffer is a Java CLI program that allows you to fetch data from the [Steam Market](https://steamcommunity.com/market/search?appid=730) 
-and/or the [CSFloat Market](https://csfloat.com/search) to calculate which CS2 Case is the best considering its price and possible returns.<br>
+and/or the [CSFloat Market](https://csfloat.com/search) to calculate which CS2 Case is the best considering its price and possible returns, so basically the ROI (Return of Investment) of every case.<br>
 Via the command line you can afterward update skin or case prices, so you always can check for ongoing changes in the market.<br>
 For **43 cases** and **2195 items** distributed over these, resulting in **10'601** possible outcomes for all cases, the program fetches data and calculates the expected value for each case.
 
@@ -114,95 +114,95 @@ When the program is done it outputs expected values for Steam / CSFloat data in 
     
     |--------------------------------
     |Steam:
-    |#1 Snakebite Case: -0,998731 €
-    |#2 Fever Case: -1,044466 €
-    |#3 Recoil Case: -1,049612 €
-    |#4 Kilowatt Case: -1,071190 €
-    |#5 Gallery Case: -1,075048 €
-    |#6 Revolution Case: -1,125911 €
-    |#7 Shadow Case: -1,160832 €
-    |#8 Prisma Case: -1,207211 €
-    |#9 Horizon Case: -1,278167 €
-    |#10 Falchion Case: -1,339511 €
-    |#11 Prisma 2 Case: -1,429039 €
-    |#12 Fracture Case: -1,469483 €
-    |#13 Dreams & Nightmares Case: -1,612511 €
-    |#14 CS20 Case: -1,665671 €
-    |#15 Operation Wildfire Case: -1,666284 €
-    |#16 Clutch Case: -1,668352 €
-    |#17 Revolver Case: -1,919345 €
-    |#18 Chroma 2 Case: -2,099081 €
-    |#19 Danger Zone Case: -2,189741 €
-    |#20 Gamma Case: -2,436050 €
-    |#21 Gamma 2 Case: -2,572441 €
-    |#22 Chroma 3 Case: -2,612086 €
-    |#23 Operation Vanguard Weapon Case: -2,715297 €
-    |#24 Operation Phoenix Weapon Case: -2,937463 €
-    |#25 Spectrum 2 Case: -3,021243 €
-    |#26 Chroma Case: -3,074459 €
-    |#27 Spectrum Case: -3,298612 €
-    |#28 Shattered Web Case: -3,973230 €
-    |#29 X-Ray P250 Package: -3,976476 €
-    |#30 eSports 2013 Winter Case: -4,393399 €
-    |#31 Operation Broken Fang Case: -4,672433 €
-    |#32 Huntsman Weapon Case: -5,837685 €
-    |#33 Winter Offensive Weapon Case: -5,846244 €
-    |#34 Operation Breakout Weapon Case: -6,809342 €
-    |#35 eSports 2014 Summer Case: -7,497939 €
-    |#36 Operation Riptide Case: -9,920490 €
-    |#37 CS:GO Weapon Case 3: -11,125165 €
-    |#38 Glove Case: -14,979169 €
-    |#39 CS:GO Weapon Case 2: -15,144086 €
-    |#40 Operation Hydra Case: -23,244229 €
-    |#41 Operation Bravo Case: -53,679068 €
-    |#42 eSports 2013 Case: -60,669863 €
-    |#43 CS:GO Weapon Case: -149,730953 €
+    |#1 Snakebite Case: -0,941824 €
+    |#2 Recoil Case: -0,976759 €
+    |#3 Kilowatt Case: -1,043648 €
+    |#4 Revolution Case: -1,059415 €
+    |#5 Gallery Case: -1,098270 €
+    |#6 Fever Case: -1,114443 €
+    |#7 Shadow Case: -1,192893 €
+    |#8 Prisma Case: -1,221434 €
+    |#9 Falchion Case: -1,292774 €
+    |#10 Horizon Case: -1,402961 €
+    |#11 Fracture Case: -1,457864 €
+    |#12 Prisma 2 Case: -1,508008 €
+    |#13 Clutch Case: -1,584352 €
+    |#14 Dreams & Nightmares Case: -1,594679 €
+    |#15 CS20 Case: -1,635840 €
+    |#16 Operation Wildfire Case: -1,715734 €
+    |#17 Revolver Case: -1,863578 €
+    |#18 Danger Zone Case: -2,159867 €
+    |#19 Chroma 2 Case: -2,255544 €
+    |#20 Gamma Case: -2,349013 €
+    |#21 Operation Vanguard Weapon Case: -2,590633 €
+    |#22 Gamma 2 Case: -2,650987 €
+    |#23 Chroma 3 Case: -2,689781 €
+    |#24 eSports 2013 Winter Case: -2,836707 €
+    |#25 Operation Phoenix Weapon Case: -2,916844 €
+    |#26 Chroma Case: -3,040620 €
+    |#27 Spectrum 2 Case: -3,058203 €
+    |#28 Spectrum Case: -3,188102 €
+    |#29 X-Ray P250 Package: -3,961240 €
+    |#30 Shattered Web Case: -4,033192 €
+    |#31 Operation Broken Fang Case: -4,542026 €
+    |#32 Winter Offensive Weapon Case: -5,203363 €
+    |#33 Huntsman Weapon Case: -5,356241 €
+    |#34 Operation Breakout Weapon Case: -6,728014 €
+    |#35 eSports 2014 Summer Case: -7,038488 €
+    |#36 Operation Riptide Case: -9,508232 €
+    |#37 CS:GO Weapon Case 3: -10,564533 €
+    |#38 Glove Case: -14,152495 €
+    |#39 CS:GO Weapon Case 2: -14,368496 €
+    |#40 Operation Hydra Case: -20,119475 €
+    |#41 Operation Bravo Case: -52,407289 €
+    |#42 eSports 2013 Case: -61,068455 €
+    |#43 CS:GO Weapon Case: -147,199837 €
     
     |--------------------------------
     |CSFloat:
-    |#1 Revolver Case: -0,844463 €
-    |#2 Horizon Case: -1,131506 €
-    |#3 Gallery Case: -1,261619 €
-    |#4 Snakebite Case: -1,305625 €
-    |#5 Kilowatt Case: -1,387975 €
-    |#6 Recoil Case: -1,394185 €
-    |#7 Prisma Case: -1,394846 €
-    |#8 Revolution Case: -1,423596 €
-    |#9 Falchion Case: -1,433564 €
-    |#10 Fever Case: -1,442538 €
-    |#11 CS20 Case: -1,511854 €
-    |#12 Operation Wildfire Case: -1,560340 €
-    |#13 Fracture Case: -1,635439 €
-    |#14 Prisma 2 Case: -1,645094 €
-    |#15 Dreams & Nightmares Case: -1,682597 €
-    |#16 Clutch Case: -1,692773 €
-    |#17 Danger Zone Case: -1,788402 €
-    |#18 Chroma 2 Case: -2,081171 €
-    |#19 Chroma 3 Case: -2,185910 €
-    |#20 Gamma Case: -2,368137 €
-    |#21 Operation Vanguard Weapon Case: -2,403219 €
-    |#22 Gamma 2 Case: -2,433609 €
-    |#23 Spectrum Case: -2,459040 €
-    |#24 Spectrum 2 Case: -2,515367 €
-    |#25 Chroma Case: -2,549021 €
-    |#26 Operation Phoenix Weapon Case: -2,713011 €
-    |#27 Shattered Web Case: -2,748405 €
+    |#1 Snakebite Case: -1,282919 €
+    |#2 Gallery Case: -1,344228 €
+    |#3 Recoil Case: -1,361109 €
+    |#4 Kilowatt Case: -1,379923 €
+    |#5 Revolution Case: -1,390952 €
+    |#6 Horizon Case: -1,409741 €
+    |#7 Falchion Case: -1,424425 €
+    |#8 Prisma Case: -1,432412 €
+    |#9 Fever Case: -1,505209 €
+    |#10 Revolver Case: -1,574131 €
+    |#11 Operation Wildfire Case: -1,606917 €
+    |#12 CS20 Case: -1,617156 €
+    |#13 Fracture Case: -1,655085 €
+    |#14 Clutch Case: -1,665891 €
+    |#15 Dreams & Nightmares Case: -1,690302 €
+    |#16 Prisma 2 Case: -1,727802 €
+    |#17 Danger Zone Case: -1,948701 €
+    |#18 Chroma 2 Case: -2,224586 €
+    |#19 Gamma Case: -2,319744 €
+    |#20 Chroma 3 Case: -2,359391 €
+    |#21 Operation Vanguard Weapon Case: -2,419202 €
+    |#22 Spectrum Case: -2,454425 €
+    |#23 Gamma 2 Case: -2,546867 €
+    |#24 Chroma Case: -2,575457 €
+    |#25 Spectrum 2 Case: -2,580353 €
+    |#26 Operation Phoenix Weapon Case: -2,741883 €
+    |#27 Shattered Web Case: -2,904793 €
     |#28 Shadow Case: -3,450000 €
-    |#29 Operation Broken Fang Case: -3,470161 €
-    |#30 X-Ray P250 Package: -3,569247 €
-    |#31 Huntsman Weapon Case: -3,911548 €
-    |#32 Winter Offensive Weapon Case: -4,685782 €
-    |#33 Operation Breakout Weapon Case: -4,784686 €
-    |#34 eSports 2013 Winter Case: -5,877259 €
-    |#35 eSports 2014 Summer Case: -6,017283 €
-    |#36 Operation Riptide Case: -6,432725 €
-    |#37 CS:GO Weapon Case 3: -9,183823 €
-    |#38 Glove Case: -10,772901 €
-    |#39 CS:GO Weapon Case 2: -13,771250 €
-    |#40 Operation Hydra Case: -16,480547 €
-    |#41 Operation Bravo Case: -36,731086 €
-    |#42 eSports 2013 Case: -51,442176 €
-    |#43 CS:GO Weapon Case: -102,139553 €
+    |#29 Operation Broken Fang Case: -3,454590 €
+    |#30 X-Ray P250 Package: -3,558042 €
+    |#31 Huntsman Weapon Case: -3,801951 €
+    |#32 Winter Offensive Weapon Case: -4,506181 €
+    |#33 Operation Breakout Weapon Case: -4,758268 €
+    |#34 eSports 2013 Winter Case: -5,211548 €
+    |#35 eSports 2014 Summer Case: -5,705322 €
+    |#36 Operation Riptide Case: -6,500004 €
+    |#37 CS:GO Weapon Case 3: -8,880679 €
+    |#38 Glove Case: -9,723747 €
+    |#39 CS:GO Weapon Case 2: -13,247827 €
+    |#40 Operation Hydra Case: -14,597412 €
+    |#41 Operation Bravo Case: -36,374853 €
+    |#42 eSports 2013 Case: -51,931575 €
+    |#43 CS:GO Weapon Case: -99,904455 €
     |--------------------------------
 
 ## 🚨 Getting Help

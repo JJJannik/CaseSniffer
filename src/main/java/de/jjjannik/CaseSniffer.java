@@ -3,7 +3,6 @@ package de.jjjannik;
 import com.google.gson.Gson;
 import de.jjjannik.classes.Case;
 import de.jjjannik.classes.collections.CSCollection;
-import de.jjjannik.classes.entities.SteamCookie;
 import de.jjjannik.dao.CaseSnifferDao;
 import de.jjjannik.services.CsFloatMarketService;
 import de.jjjannik.services.CurrencyConvertion;
@@ -27,6 +26,7 @@ import java.util.Arrays;
 @Log4j2
 public class CaseSniffer {
     private static final int CSFLOAT_KEY_LENGTH = 32;
+    private static final int STEAM_PROFILE_ID_LENGTH = 17;
 
     public static final Gson GSON = new Gson();
     private static CaseSnifferDao dao;
@@ -56,7 +56,7 @@ public class CaseSniffer {
 
         initDatasource();
 
-        HttpClient httpClient = new HttpClient(readCookie(config.cookieFile()));
+        HttpClient httpClient = new HttpClient(config.steamLogin());
 
         final ExpectedValueCalculator valueCalc = getExpectedValueCalculator(config, httpClient);
 
@@ -69,7 +69,7 @@ public class CaseSniffer {
 
             valueCalc.updateSkinPrices(c, config.updateSkinPrices());
 
-            if (config.useSteam()) {
+            if (config.steamLogin() != null) {
                 valueCalc.calcExpectedValues(c, CsSnifferConfiguration.DataSource.STEAM);
             }
 
@@ -86,7 +86,7 @@ public class CaseSniffer {
         SteamMarketService steamService = null;
         CsFloatMarketService floatMarketService = null;
 
-        if (config.useSteam()) {
+        if (config.steamLogin() != null) {
             steamService = new SteamMarketService(httpClient.getClient());
         }
 
@@ -108,52 +108,12 @@ public class CaseSniffer {
         return valueCalc;
     }
 
-    private static SteamCookie readCookie(File cookieFile) {
-        if (cookieFile == null) {
-            return null;
-        }
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(cookieFile))) {
-            String line;
-
-            SteamCookie.SteamCookieBuilder builder = SteamCookie.builder();
-
-            while((line = reader.readLine()) != null) {
-
-                if (line.contains(SteamCookie.LOGIN_KEY)) {
-                    String login = line.split(SteamCookie.LOGIN_KEY)[1].strip();
-                    builder.steamLogin(login);
-
-                    builder.steamId(login.split("%")[0]);
-                }
-
-                if (line.contains(SteamCookie.SESSION_ID)) {
-                    builder.sessionId(line.split(SteamCookie.SESSION_ID)[1].strip());
-                }
-            }
-
-            SteamCookie cookie = builder.build();
-
-            if (cookie.getSessionId() == null || cookie.getSteamLogin() == null) {
-                throw new IllegalArgumentException("Cookie file either does not contain Secure Steam Login or Session Id or isn't formatted correctly.");
-            }
-
-            return builder.build();
-        } catch (IOException ex) {
-            log.error("Could not read cookie: ", ex);
-            System.exit(1);
-        }
-
-        return null;
-    }
-
     private static CsSnifferConfiguration handleClArgs(String[] args) {
-        File cookieFile = null;
+        String steamLogin = null;
         boolean updateItemIds = false;
         boolean updateCasePrices = false;
         boolean updateSkinPrices = false;
         String csFloatKey = null;
-        boolean useSteam = false;
 
         boolean debug = false;
 
@@ -163,12 +123,12 @@ public class CaseSniffer {
                     log.info("""
                             Usage: java -jar CaseSniffer.jar [OPTIONS]
                             
-                            Calculate and display expected value for each case. Providing no additional flags will display previous calculated expected values.
+                            Calculate and display expected value and ROI for each case. Providing no additional flags will display previous calculated expected values and ROI's.
                             
                             Options:
-                                --steam                 Calculate expected value based on Steam data.
-                                                        Next argument can be file path to Steam Login Cookie, if not provided program searches in directory ./CaseSniffer for 'cookies.txt'
-                                --csfloat                 Calculate expected value based on CSFloat data.
+                                --steam                 Calculates based on Steam data.
+                                                        Next argument has to be Steam Secure Login string
+                                --csfloat               Calculates based on CSFloat data.
                                                         Next argument has to be an CSFloat API key
                                 -i, --updateItemIds     Expected value will be calculated with updated Item Ids. Use this only, if there is a problem with the previously fetched item ids.
                                                         Can only be used if --steam flag is provided
@@ -182,10 +142,18 @@ public class CaseSniffer {
                     break;
                 }
                 case "--steam": {
-                    useSteam = true;
+                    int idx = ++i;
 
-                    if (i + 1 < args.length) {
-                        cookieFile = new File(args[i + 1]);
+                    if (idx >= args.length) {
+                        log.error("No Steam Secure Login cookie value provided.");
+                        System.exit(1);
+                    }
+
+                    steamLogin = args[idx];
+
+                    if (!steamLogin.contains("%7C%7C") || steamLogin.split("%")[0].length() != STEAM_PROFILE_ID_LENGTH) {
+                        log.error("Steam secure login string not valid. Either wrong format or containing profile id has wrong length (is: %d, should: %d)".formatted(steamLogin.split("%")[0].length(), STEAM_PROFILE_ID_LENGTH));
+                        System.exit(1);
                     }
 
                     break;
@@ -201,7 +169,7 @@ public class CaseSniffer {
                     csFloatKey = args[idx];
 
                     if (csFloatKey.length() != CSFLOAT_KEY_LENGTH) {
-                        log.error("CSFloat API Key not valid. Is %d characters long, should be %d".formatted(CSFLOAT_KEY_LENGTH, csFloatKey.length()));
+                        log.error("CSFloat API Key not valid. Is %d characters long, should be %d".formatted(csFloatKey.length(), CSFLOAT_KEY_LENGTH));
                         System.exit(1);
                     }
 
@@ -238,23 +206,13 @@ public class CaseSniffer {
             }
         }
 
-        if (useSteam && (cookieFile == null || !cookieFile.exists())) {
-            cookieFile = new File("./CaseSniffer/cookies.txt");
-
-            if (!cookieFile.exists()) {
-                log.error("No cookies file as argument or in ./CaseSniffer/cookies.txt provided!");
-                System.exit(1);
-            }
-        }
-
-        if (updateItemIds && !useSteam) {
+        if (updateItemIds && steamLogin == null) {
             log.warn("Update Item ids flag provided, but Steam flag isn't, therefor it will be ignored.");
             updateItemIds = false;
         }
 
         return new CsSnifferConfiguration(
-                useSteam,
-                cookieFile,
+                steamLogin,
                 updateItemIds,
                 csFloatKey,
                 updateCasePrices,

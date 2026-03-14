@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.io.File;
 
-public record CsSnifferConfiguration(boolean useSteam, File cookieFile, boolean updateItemIds, String csFloatKey, boolean updateCasePrices,
+public record CsSnifferConfiguration(String steamLogin, boolean updateItemIds, String csFloatKey, boolean updateCasePrices,
                                      boolean updateSkinPrices, boolean debug) {
 
     @RequiredArgsConstructor

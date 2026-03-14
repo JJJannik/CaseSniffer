@@ -1,6 +1,5 @@
 package de.jjjannik.utils;
 
-import de.jjjannik.classes.entities.SteamCookie;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.*;
@@ -39,8 +38,8 @@ public class HttpClient {
             .cookieJar(cookieJar)
             .build();
 
-    public HttpClient(SteamCookie cookie) {
-        if (cookie == null) {
+    public HttpClient(String steamLogin) {
+        if (steamLogin == null) {
             return;
         }
 
@@ -49,15 +48,9 @@ public class HttpClient {
                         .domain("steamcommunity.com")
                         .path("/")
                         .name("steamLoginSecure")
-                        .value(cookie.getSteamLogin())
+                        .value(steamLogin)
                         .secure()
                         .httpOnly()
-                        .build(),
-                new Cookie.Builder()
-                        .domain("steamcommunity.com")
-                        .path("/")
-                        .name("sessionid")
-                        .value(cookie.getSessionId())
                         .build()
         );
 
@@ -66,14 +59,13 @@ public class HttpClient {
                 cookies
         );
 
-
-        if (!validateCookie(cookie)) {
+        if (!validateCookie(steamLogin)) {
             throw new IllegalStateException("Invalid or outdated Steam cookie provided!");
         }
     }
 
-    private boolean validateCookie(SteamCookie cookie) {
-        HttpUrl httpUrl = HttpUrl.parse(PROFILE_URL.formatted(cookie.getSteamId()));
+    private boolean validateCookie(String steamLogin) {
+        HttpUrl httpUrl = HttpUrl.parse(PROFILE_URL.formatted(this.extractSteamId(steamLogin)));
 
         Request.Builder builder = new Request.Builder()
                 .url(httpUrl)
@@ -89,9 +81,13 @@ public class HttpClient {
 
             return body.contains(httpUrl + "/edit");
         } catch (IOException e) {
-            log.error("Could not retrieve Profile Page for Steam Id '%s': ".formatted(cookie.getSteamId()), e);
+            log.error("Could not retrieve Profile Page for Steam Id '{}': ", this.extractSteamId(steamLogin), e);
         }
 
         return false;
+    }
+
+    private String extractSteamId(String steamLogin) {
+        return steamLogin.split("%")[0];
     }
 }

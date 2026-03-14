@@ -1,7 +1,7 @@
 # CS2 CaseSniffer
 
 The CaseSniffer is a Java CLI program that allows you to fetch data from the [Steam Market](https://steamcommunity.com/market/search?appid=730) 
-and/or the [CSFloat Market](https://csfloat.com/search) to calculate which CS2 Case is the best considering its price and possible returns, so basically the ROI (Return of Investment) of every case.<br>
+and/or the [CSFloat Market](https://csfloat.com/search) to calculate which CS2 Case is the best considering its price and possible returns, so basically as well the ROI (Return of Investment) of every case.<br>
 Via the command line you can afterward update skin or case prices, so you always can check for ongoing changes in the market.<br>
 For **43 cases** and **2195 items** distributed over these, resulting in **10'601** possible outcomes for all cases, the program fetches data and calculates the expected value for each case.
 
@@ -65,7 +65,7 @@ you need your profile to meet the requirements and then get your Developer API k
 With that key provided the program can perform **200 requests per hour**, which is also outputted by the program if the limit is reached and when it will be reset.
 
 
-> [!NOTE]
+> [!WARN]
 > Be aware that this key is shared with your own personal activity on CSFloat, so if the programm uses your 200 request per hour, you also can't access the CSFloat market the normal way, since you're also rate limited there.
 
 ## 🏃‍♂️ How to Use
@@ -76,7 +76,7 @@ Of course, you can also build it from source yourself via Gradle.
 
 To run the programm it's recommended to use at least Java 17 with following command `java -jar CaseSniffer.jar [OPTIONS]`.
 
-The program itself Calculate and display expected value for each case. 
+The program itself calculates and displays expected value for each case. 
 Providing no additional flags will display previous calculated expected values.
 
 Possible options to provide the program with are:

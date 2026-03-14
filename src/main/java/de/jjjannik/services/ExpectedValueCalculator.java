@@ -41,18 +41,20 @@ public class ExpectedValueCalculator {
             return;
         }
 
-        Integer casePrice = dao.getCasePrice(caseId, ds);
+        Integer priceCt = dao.getCasePrice(caseId, ds);
 
-        if (casePrice == null) {
+        if (priceCt == null) {
             log.warn("No price found in db for case: {}", c);
             return;
         }
 
+        double casePrice = priceCt / 100.0;
+
         if (doDebug) {
-            log.debug("Case price for '{}': {}", c, casePrice / 100.0);
+            log.debug("Case price for '{}': {}", c, casePrice);
         }
 
-        AtomicReference<Double> expVal = new AtomicReference<>(0.0);
+        AtomicReference<Double> expReturn = new AtomicReference<>(0.0);
 
         execForAllSkins(c, skin -> {
             Long skinId  = dao.getItemId(skin);
@@ -86,19 +88,20 @@ public class ExpectedValueCalculator {
 
             double prob = rarityProb * floatProb * statTrak;
 
-            expVal.set(expVal.get() + ((skinPrice / 100.0) * prob));
+            expReturn.set(expReturn.get() + ((skinPrice / 100.0) * prob));
 
             if (doDebug) {
-                log.debug("{}: Price: {}, Prob: {}, Exp: {}", skin.toSteamMarketHash(), skinPrice, prob, expVal.get());
+                log.debug("{}: Price: {}, Prob: {}, Exp: {}", skin.toSteamMarketHash(), skinPrice, prob, expReturn.get());
             }
         });
 
-        double expV = expVal.get() - (casePrice / 100.0) - Case.KEY_PRICE;
+        double expVal = expReturn.get() - casePrice - Case.KEY_PRICE;
+        double roi = expReturn.get() / (casePrice + Case.KEY_PRICE) * 100.0;
 
-        dao.setExpectedVal(caseId, expV, ds);
+        dao.setExpectedVal(caseId, expVal, roi, ds);
 
         if (doDebug) {
-            log.debug("Expected Value for '{}': {}\n", c, expV);
+            log.debug("Expected Value for '{}': {}; \t ROI: {}\n", c, expVal, roi);
         }
     }
 
@@ -189,7 +192,9 @@ public class ExpectedValueCalculator {
             }
 
             if (steamId == 0) {
-                dao.setSkinPrice(itemId, 0, DataSource.STEAM);
+                dao.setCasePrice(itemId, 0, DataSource.STEAM);
+                log.warn("No steam id for case: {}", c);
+                return;
             }
 
             if (!updateAll && dao.getCasePrice(itemId, DataSource.STEAM) != null) {
@@ -248,6 +253,7 @@ public class ExpectedValueCalculator {
 
                 if (steamId == 0) {
                     dao.setSkinPrice(itemId, 0, DataSource.STEAM);
+                    return;
                 }
 
                 if (!updateAll && dao.getSkinPrice(itemId, DataSource.STEAM) != null) {
@@ -337,7 +343,7 @@ public class ExpectedValueCalculator {
             for (int i = 0; i < values.size(); i++) {
                 ValueEntity ve = values.get(i);
 
-                System.out.printf("|#%s %s: %f €%n", i+1, ve.getCCase().getValue(), ve.getExpV());
+                System.out.printf("|#%s %s: %f €;\tROI: %f %%%n", i+1, ve.getCCase().getValue(), ve.getExpV(), ve.getRoi());
             }
         }
         System.out.println("|--------------------------------");

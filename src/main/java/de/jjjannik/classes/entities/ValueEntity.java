@@ -7,4 +7,6 @@ import lombok.Data;
 public class ValueEntity {
     private final Case cCase;
     private final double expV;
+    private final double roi;
+    private final long timestamp;
 }

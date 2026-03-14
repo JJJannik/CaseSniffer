@@ -27,7 +27,7 @@ public interface CaseSnifferDao {
     @SqlUpdate("CREATE TABLE IF NOT EXISTS `skinPrices` (`itemId` INTEGER NOT NULL, `price` INTEGER NOT NULL, `dataSource` VARCHAR(16) NOT NULL, `time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, FOREIGN KEY(itemId) REFERENCES itemIds(id), UNIQUE(itemId, dataSource));")
     void createSkinPriceTable();
 
-    @SqlUpdate("CREATE TABLE IF NOT EXISTS `expValues` (`itemId` INTEGER NOT NULL, `value` REEL NOT NULL, `dataSource` VARCHAR(16) NOT NULL, `time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, FOREIGN KEY(itemId) REFERENCES itemIds(id), UNIQUE(itemId, dataSource));")
+    @SqlUpdate("CREATE TABLE IF NOT EXISTS `expValues` (`itemId` INTEGER NOT NULL, `value` REEL NOT NULL, `roi` REEL NOT NULL, `dataSource` VARCHAR(16) NOT NULL, `time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, FOREIGN KEY(itemId) REFERENCES itemIds(id), UNIQUE(itemId, dataSource));")
     void createExpectedValueTable();
 
     @SqlUpdate("INSERT INTO `itemIds` (itemType, skin, wear, isStatTrak) VALUES (:getItemType.getValue, :getSkin.getName, :getWear.getValue, :isStatTrak) ON CONFLICT(itemType, skin, wear, isStatTrak) DO NOTHING;")
@@ -60,10 +60,10 @@ public interface CaseSnifferDao {
     @SqlQuery("SELECT `price` FROM `skinPrices` WHERE itemId=? AND dataSource=?;")
     Integer getSkinPrice(@Bind long id, @Bind DataSource dataSource);
 
-    @SqlUpdate("INSERT INTO expValues (itemId, value, dataSource) SELECT :id, :value, :ds WHERE EXISTS (SELECT 1 FROM casePrices WHERE itemId = :id) ON CONFLICT(itemId, dataSource) DO UPDATE SET value = :value;")
-    void setExpectedVal(@Bind("id") long id, @Bind("value") double value, @Bind("ds") DataSource dataSource);
+    @SqlUpdate("INSERT INTO expValues (itemId, value, roi, dataSource) SELECT :id, :value, :roi, :ds WHERE EXISTS (SELECT 1 FROM casePrices WHERE itemId = :id) ON CONFLICT(itemId, dataSource) DO UPDATE SET value = :value, roi = :roi;")
+    void setExpectedVal(@Bind("id") long id, @Bind("value") double value, @Bind("roi") double roi, @Bind("ds") DataSource dataSource);
 
     @RegisterRowMapper(ValueEntityMapper.class)
-    @SqlQuery("SELECT e.value, i.itemType FROM expValues e JOIN itemIds i ON e.itemId = i.id WHERE e.dataSource = ? ORDER BY e.value DESC;")
+    @SqlQuery("SELECT e.value, e.roi, i.itemType, e.time FROM expValues e JOIN itemIds i ON e.itemId = i.id WHERE e.dataSource = ? ORDER BY e.roi DESC;")
     List<ValueEntity> getExpectedValuesSorted(@Bind DataSource dataSource);
 }

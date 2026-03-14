@@ -14,7 +14,9 @@ public class ValueEntityMapper implements RowMapper<ValueEntity> {
     public ValueEntity map(ResultSet rs, StatementContext ctx) throws SQLException {
         return new  ValueEntity(
                 Case.getByName(rs.getString("itemType")),
-                rs.getDouble("value")
+                rs.getDouble("value"),
+                rs.getDouble("roi"),
+                rs.getLong("time")
         );
     }
 }
